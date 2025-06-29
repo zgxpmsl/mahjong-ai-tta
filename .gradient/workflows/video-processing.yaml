@@ -16,25 +16,16 @@ jobs:
       
   ProcessVideo:
     resources:
-      instance-type: A4000
+      instance-type: C5
     needs:
       - CloneRepo
     inputs:
       repo: CloneRepo.outputs.repo
-    outputs:
-      processed-frames:
-        type: dataset
-        with:
-          ref: processed-frames
     uses: script@v1
     with:
       script: |-
-        cd /inputs/repo
-        pip install ultralytics opencv-python-headless
-        python src/workflows/process_video.py
-      image: paperspace/gradient-base:pt211-tf215-cudatk120-py311
-    env:
-      - name: MODEL_PATH
-        value: /models/best.pt
-      - name: OUTPUT_PATH
-        value: /outputs/processed-frames
+        echo "Video processing workflow started"
+        ls -la /inputs/repo
+        echo "Checking Python environment"
+        python --version
+      image: tensorflow/tensorflow:1.14.0-py3
