@@ -1,0 +1,19 @@
+enabled: true
+image: :image
+port: 8000
+env:
+  - name: MODEL_PATH
+    value: /models/yolov8-base/best.pt
+  - name: CONFIDENCE_THRESHOLD
+    value: "0.5"
+resources:
+  replicas: 1
+  instanceType: C5
+models:
+  - id: mojis7oi35xp5m  # 替换为你的模型ID
+    path: /models/yolov8-base
+healthCheck:
+  path: /health
+  port: 8000
+  initialDelaySeconds: 30
+  periodSeconds: 10
