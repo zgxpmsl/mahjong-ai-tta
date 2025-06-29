@@ -1,0 +1,33 @@
+on:
+  github:
+    branches:
+      only: main
+
+jobs:
+  process-video:
+    outputs:
+      processed-frames:
+        type: dataset
+        with:
+          ref: processed-frames
+    uses: container@v1
+    with:
+      args:
+        - python
+        - /app/process_video.py
+      image: paperspace/gradient-base:pt211-tf215-cudatk120-py311
+    datasets:
+      raw-videos:
+        ref: raw-videos
+        mountPath: /data/videos
+    models:
+      yolov8-base:
+        id: mojis7oi35xp5m
+        mountPath: /models
+    env:
+      - name: MODEL_PATH
+        value: /models/best.pt
+      - name: OUTPUT_PATH
+        value: /outputs/processed-frames
+    resources:
+      instance-type: A4000
