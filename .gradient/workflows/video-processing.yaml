@@ -1,4 +1,4 @@
-on:
+'on':
   github:
     branches:
       only: main
@@ -14,15 +14,14 @@ jobs:
     with:
       args:
         - python
-        - /app/process_video.py
+        - /workspace/src/workflows/process_video.py
       image: paperspace/gradient-base:pt211-tf215-cudatk120-py311
     datasets:
       raw-videos:
         ref: raw-videos
         mountPath: /data/videos
     models:
-      yolov8-base:
-        id: mojis7oi35xp5m
+      - id: mojis7oi35xp5m
         mountPath: /models
     env:
       - name: MODEL_PATH
