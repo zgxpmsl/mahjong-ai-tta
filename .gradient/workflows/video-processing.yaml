@@ -4,29 +4,37 @@
       only: main
 
 jobs:
-  process-video:
+  CloneRepo:
+    resources:
+      instance-type: C5
+    outputs:
+      repo:
+        type: volume
+    uses: git-checkout@v1
+    with:
+      url: context.event.github.url
+      
+  ProcessVideo:
+    resources:
+      instance-type: A4000
+    needs:
+      - CloneRepo
+    inputs:
+      repo: CloneRepo.outputs.repo
     outputs:
       processed-frames:
         type: dataset
         with:
           ref: processed-frames
-    uses: container@v1
+    uses: script@v1
     with:
-      args:
-        - python
-        - /workspace/src/workflows/process_video.py
+      script: |-
+        cd /inputs/repo
+        pip install ultralytics opencv-python-headless
+        python src/workflows/process_video.py
       image: paperspace/gradient-base:pt211-tf215-cudatk120-py311
-    datasets:
-      raw-videos:
-        ref: raw-videos
-        mountPath: /data/videos
-    models:
-      - id: mojis7oi35xp5m
-        mountPath: /models
     env:
       - name: MODEL_PATH
         value: /models/best.pt
       - name: OUTPUT_PATH
         value: /outputs/processed-frames
-    resources:
-      instance-type: A4000
