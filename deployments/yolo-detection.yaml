@@ -1,0 +1,15 @@
+enabled: true
+image: paperspace/fastapi-deployment:latest
+port: 8000
+resources:
+  replicas: 1
+  instanceType: P4000
+env:
+  - name: MODEL_PATH
+    value: /models/yolov8-base
+  - name: CONFIDENCE_THRESHOLD
+    value: "0.5"
+models:
+  yolov8-base:
+    id: mo2zfhfrgv0671  # 替换为你的yolov8-base模型ID
+    path: /models/yolov8-base
