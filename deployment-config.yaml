@@ -1,0 +1,26 @@
+enabled: true
+image: paperspace/fastapi-deployment:latest
+port: 8000
+env:
+  - name: MODEL_PATH
+    value: /opt/models/best.pt
+  - name: CONFIDENCE_THRESHOLD
+    value: "0.5"
+resources:
+  replicas: 1
+  instanceType: A4000
+models:
+  - id: mojis7oi35xp5m
+    path: /opt/models
+healthCheck:
+  path: /health
+  port: 8000
+  initialDelaySeconds: 60
+  periodSeconds: 10
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: cpu
+      targetAverageUtilization: 70
