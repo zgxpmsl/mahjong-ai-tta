@@ -1,3 +1,4 @@
+name: mahjong-detection
 enabled: true
 image: paperspace/fastapi-deployment:latest
 port: 8000
